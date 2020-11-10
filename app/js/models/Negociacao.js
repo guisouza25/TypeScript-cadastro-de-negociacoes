@@ -1,6 +1,5 @@
 class Negociacao {
     constructor(data, quantidade, valor) {
-        //undeline - propriedades nao podem ser alteradas fora dos metodos
         if (!data) {
             throw new Error('data deve ser preenchida');
         }

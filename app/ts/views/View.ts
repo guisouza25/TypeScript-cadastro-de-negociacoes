@@ -1,17 +1,22 @@
-class View<T> {
+//declare var $: any;
 
-	protected _elemento: Element;
+abstract class View<T> {
+
+
+	private _elemento: JQuery;
 
 	constructor(seletor: string) {
-		this._elemento = document.querySelector(seletor);
+		//this._elemento = document.querySelector(seletor);
+		this._elemento = $(seletor);
 	}
 
 
-	update(model: T): void {
-		this._elemento.innerHTML = this.template(model);
+	public update(model: T): void {
+		//this._elemento.innerHTML = this.template(model);
+		this._elemento.html(this.template(model));
 	}
 	
-	template(model: T): string {
-		throw new Error('Método deve ser implementado');
-	}
+	protected abstract template(model: T): string;
+		
+		
 }
