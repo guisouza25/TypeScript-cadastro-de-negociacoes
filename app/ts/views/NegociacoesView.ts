@@ -1,7 +1,10 @@
-class NegociacoesView extends View<Negociacoes> {
+import { Negociacoes } from '../models/Negociacoes';
+import { View } from './View';
+
+export class NegociacoesView extends View<Negociacoes> {
 	
-	
-	protected template(model: Negociacoes): string {
+
+	template(model: Negociacoes): string {
 
 		return `
 		<table class="table table-hover table-bordered">
@@ -13,7 +16,7 @@ class NegociacoesView extends View<Negociacoes> {
 					<th>VOLUME</th>
 				</tr>
 			</thead>
-			   
+				
 			<tbody>
 				${model.getNegociacoes().map(negociacao => {
 					return `		
@@ -33,5 +36,6 @@ class NegociacoesView extends View<Negociacoes> {
 		`;
 
 	}
-
 }
+
+

@@ -1,7 +1,6 @@
 //declare var $: any;
 
-abstract class View<T> {
-
+export abstract class View<T> {
 
 	private _elemento: JQuery;
 
@@ -17,6 +16,7 @@ abstract class View<T> {
 	}
 	
 	protected abstract template(model: T): string;
-		
-		
-}
+
+}  
+
+
