@@ -16,6 +16,6 @@ export class Negociacoes {
 		//passando a lista de negociacoes para um novo array, preservando
 		//o array original(_negociacoes)
 
-		return [].concat(this._negociacoes);
+		return ([] as Array<Negociacao>).concat(this._negociacoes);
 	}
 }

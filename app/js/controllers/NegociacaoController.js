@@ -1,28 +1,22 @@
-System.register(["../views/NegociacoesView", "../views/MensagemView", "../models/Negociacoes", "../models/Negociacao"], function (exports_1, context_1) {
+System.register(["../views/index", "../models/index"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var NegociacoesView_1, MensagemView_1, Negociacoes_1, Negociacao_1, NegociacaoController;
+    var index_1, index_2, NegociacaoController, DiaDaSemana, Test;
     return {
         setters: [
-            function (NegociacoesView_1_1) {
-                NegociacoesView_1 = NegociacoesView_1_1;
+            function (index_1_1) {
+                index_1 = index_1_1;
             },
-            function (MensagemView_1_1) {
-                MensagemView_1 = MensagemView_1_1;
-            },
-            function (Negociacoes_1_1) {
-                Negociacoes_1 = Negociacoes_1_1;
-            },
-            function (Negociacao_1_1) {
-                Negociacao_1 = Negociacao_1_1;
+            function (index_2_1) {
+                index_2 = index_2_1;
             }
         ],
         execute: function () {
             NegociacaoController = class NegociacaoController {
                 constructor() {
-                    this._negociacoes = new Negociacoes_1.Negociacoes();
-                    this._negociacoesView = new NegociacoesView_1.NegociacoesView('#negociacoesView');
-                    this._mensagemView = new MensagemView_1.MensagemView('#mensagemView');
+                    this._negociacoes = new index_2.Negociacoes();
+                    this._negociacoesView = new index_1.NegociacoesView('#negociacoesView', true);
+                    this._mensagemView = new index_1.MensagemView('#mensagemView', true);
                     this._inputData = $('#data');
                     this._inputQuantidade = $('#quantidade');
                     this._inputValor = $('#valor');
@@ -30,13 +24,33 @@ System.register(["../views/NegociacoesView", "../views/MensagemView", "../models
                 }
                 adiciona(event) {
                     event.preventDefault();
-                    const negociacao = new Negociacao_1.Negociacao(new Date(this._inputData.val().replace(/-/g, ',')), parseInt(this._inputQuantidade.val()), parseFloat(this._inputValor.val()));
+                    let data = new Date(this._inputData.val().replace(/-/g, ','));
+                    if (data.getDay() == DiaDaSemana.Domingo || data.getDay() == DiaDaSemana.Sabado) {
+                        this._mensagemView.update('Negociações somente em dias úteis!');
+                        return;
+                    }
+                    const negociacao = new index_2.Negociacao(data, parseInt(this._inputQuantidade.val()), parseFloat(this._inputValor.val()));
                     this._negociacoes.adiciona(negociacao);
+                    this._negociacoes.getNegociacoes().length = 0;
                     this._negociacoesView.update(this._negociacoes);
                     this._mensagemView.update('Negociação adicionada com sucesso!');
                 }
             };
             exports_1("NegociacaoController", NegociacaoController);
+            (function (DiaDaSemana) {
+                DiaDaSemana[DiaDaSemana["Domingo"] = 0] = "Domingo";
+                DiaDaSemana[DiaDaSemana["Segunda"] = 1] = "Segunda";
+                DiaDaSemana[DiaDaSemana["Terca"] = 2] = "Terca";
+                DiaDaSemana[DiaDaSemana["Quarta"] = 3] = "Quarta";
+                DiaDaSemana[DiaDaSemana["Quinta"] = 4] = "Quinta";
+                DiaDaSemana[DiaDaSemana["Sexta"] = 5] = "Sexta";
+                DiaDaSemana[DiaDaSemana["Sabado"] = 6] = "Sabado";
+            })(DiaDaSemana || (DiaDaSemana = {}));
+            (function (Test) {
+                Test[Test["a"] = 1] = "a";
+                Test[Test["b"] = 2] = "b";
+                Test[Test["c"] = 3] = "c";
+            })(Test || (Test = {}));
         }
     };
 });

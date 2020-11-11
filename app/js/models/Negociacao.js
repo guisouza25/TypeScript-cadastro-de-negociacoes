@@ -7,24 +7,15 @@ System.register([], function (exports_1, context_1) {
         execute: function () {
             Negociacao = class Negociacao {
                 constructor(data, quantidade, valor) {
+                    this.data = data;
+                    this.quantidade = quantidade;
+                    this.valor = valor;
                     if (!data) {
                         throw new Error('data deve ser preenchida');
                     }
-                    this._data = data;
-                    this._quantidade = quantidade;
-                    this._valor = valor;
-                }
-                get data() {
-                    return this._data;
-                }
-                get quantidade() {
-                    return this._quantidade;
-                }
-                get valor() {
-                    return this._valor;
                 }
                 get volume() {
-                    return (this._quantidade * this._valor);
+                    return (this.quantidade * this.valor);
                 }
             };
             exports_1("Negociacao", Negociacao);
