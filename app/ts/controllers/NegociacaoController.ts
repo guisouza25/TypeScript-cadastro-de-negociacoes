@@ -1,23 +1,24 @@
 import { NegociacoesView, MensagemView } from '../views/index';
 import { Negociacoes, Negociacao } from '../models/index';
+import { domInject } from '../helpers/decorators/index';
 
 export class NegociacaoController {
 
+	@domInject('#data')
 	private _inputData: JQuery;
+
+	@domInject('#quantidade')
 	private _inputQuantidade: JQuery;
+	
+	@domInject('#valor')
 	private _inputValor: JQuery;
 	private _negociacoes = new Negociacoes();
 	private _negociacoesView = new NegociacoesView('#negociacoesView', true);
 	private _mensagemView = new MensagemView('#mensagemView', true);
 
 	constructor() {
-
-		this._inputData = $('#data');
-		this._inputQuantidade = $('#quantidade');
-		this._inputValor = $('#valor');
 		this._negociacoesView.update(this._negociacoes);
 	}
-
 
 	adiciona(event: Event) { 
 
@@ -37,7 +38,6 @@ export class NegociacaoController {
 			parseFloat(this._inputValor.val())
 		);
 		
-		
 		this._negociacoes.adiciona(negociacao);
 
 		this._negociacoes.getNegociacoes().length = 0
@@ -49,11 +49,8 @@ export class NegociacaoController {
 		// });
 
 		this._negociacoesView.update(this._negociacoes)
-
 		this._mensagemView.update('Negociação adicionada com sucesso!');
-
 	}
-
 }
 
 enum DiaDaSemana {
