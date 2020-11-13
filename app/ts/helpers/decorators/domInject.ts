@@ -1,6 +1,8 @@
 /**
  * Busca um elemento do DOM apenas quando a propriedade no qual
  * este decorator está posicionado for acessada - Lazy Loading.
+ * Injeta elementos do DOM nas propriedades da classe, transformando
+ * essas propriedades em getters.
  * @param seletor 
  */
 export function domInject(seletor: string) {
@@ -33,7 +35,7 @@ export function domInject(seletor: string) {
 		 * target - que vai receber a property que vai ser criada.
 		 * propertyKey - nome da propriedade a ser criada
 		 * ultimo param - definindo atributo da property, se vai ser um getter ou setter,
-		 * get: getter - passando a função acima.
+		 * get: getter - passando a função que define o getter
 		 */
 		Object.defineProperty(target, propertyKey, {
 			get: getter
