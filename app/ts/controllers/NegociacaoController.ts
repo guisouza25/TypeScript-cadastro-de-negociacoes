@@ -1,6 +1,8 @@
 import { NegociacoesView, MensagemView } from '../views/index';
-import { Negociacoes, Negociacao } from '../models/index';
-import { domInject } from '../helpers/decorators/index';
+import { Negociacoes, Negociacao, NegociacaoParcial } from '../models/index';
+import { domInject, throttle } from '../helpers/decorators/index';
+
+let timer = 0;
 
 export class NegociacaoController {
 
@@ -16,13 +18,14 @@ export class NegociacaoController {
 	private _negociacoesView = new NegociacoesView('#negociacoesView', true);
 	private _mensagemView = new MensagemView('#mensagemView', true);
 
+
+
 	constructor() {
 		this._negociacoesView.update(this._negociacoes);
 	}
 
-	adiciona(event: Event) { 
-
-		event.preventDefault();
+	@throttle(500)
+	adiciona() { 
 
 		let data = new Date(this._inputData.val().replace(/-/g, ','));
 
@@ -51,6 +54,40 @@ export class NegociacaoController {
 		this._negociacoesView.update(this._negociacoes)
 		this._mensagemView.update('Negociação adicionada com sucesso!');
 	}
+	
+	@throttle(500)
+	importaDados() {
+	
+		function isOk(response: Response) {
+			if(response.ok) {
+				return response
+			} else {
+				throw new Error(response.statusText)
+			}
+		}
+
+	
+		fetch('http://localhost:8080/dados')
+			// .then(function(response) {
+			// 	console.log(response.json())
+			// })
+			.then(response => {
+				return isOk(response)
+			})
+			.then(response => {
+				return response.json()
+			})
+			.then((dados: Array<NegociacaoParcial>) => {
+				dados
+					.map(dado => { return new Negociacao(new Date(), dado.vezes, dado.montante)})
+					.forEach(negociacao => { return this._negociacoes.adiciona(negociacao) })
+				this._negociacoesView.update(this._negociacoes)
+			})
+			.catch(error => {
+				console.log(error.message)
+			})
+	
+	}	
 }
 
 enum DiaDaSemana {

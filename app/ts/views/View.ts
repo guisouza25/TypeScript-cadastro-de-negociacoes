@@ -12,7 +12,7 @@ export abstract class View<T> {
 	 * @param escapar Opcional. True para remover scripts não desejados no template da view.
 	 */
 	//escapar? opcional quando nao é passado vira undefined. Por causa do (strictNullChecks)
-	//Faço o valor padrão ser false caso não seja passado param.
+	//faço o valor padrão ser false caso não seja passado nenhum param.
 	constructor(seletor: string, escapar = false) {
 
 		//this._elemento = document.querySelector(seletor);
@@ -20,7 +20,7 @@ export abstract class View<T> {
 		this._escapar = escapar;
 	}
 
-	//@tempoDeExecucao()
+	@tempoDeExecucao()
 	update(model: T): void {
 
 		let template = this.template(model);

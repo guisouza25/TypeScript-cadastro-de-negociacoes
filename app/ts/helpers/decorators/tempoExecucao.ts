@@ -3,7 +3,7 @@ export function tempoDeExecucao() {
 	return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
 
 		//o metodo no qual o decorator está posicionado. Guardando o metodo original
-		const metodoOriginal = descriptor.value; 
+		const metodoOriginal = descriptor.value;
 
 		//sobrescrevendo o metodo original com esta funcao. ...args -  o método que estou 
 		//colocando no decorator pode receber varios parametros de varios tipos. para ter 
