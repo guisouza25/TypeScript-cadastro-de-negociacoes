@@ -17,7 +17,7 @@ O servidor irá subir o projeto na porta 3000. Acesse `http://localhost:3000`
 
 ## API Externa
 
-Para consumir a API externa utilize <a href="https://github.com/guisouza25/TypeScript-cadastro-de-negociacoes-api/tree/master">este projeto<a>, abra um prompt de comando e execute os comandos `npm install` e `npm start`.
+Para subir o servidor da API externa utilize <a href="https://github.com/guisouza25/TypeScript-cadastro-de-negociacoes-api/tree/master">este projeto<a>, abra um prompt de comando e execute os comandos `npm install` e `npm start`.
 
-O servidor irá subir o projeto na porta 8080. Acesse `http://localhost:8080/dados`
+O servidor irá subir o projeto com os dados a serem utilizados na URI `http://localhost:8080/dados`
 
