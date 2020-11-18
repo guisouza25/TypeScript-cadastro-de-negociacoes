@@ -4,7 +4,7 @@ export class NegociacaoService {
 
 	listarNegociacoes(handler: HandlerFunction): Promise<Negociacao[]> {
 
-		return fetch('http://localhost:8080/dadsos')
+		return fetch('http://localhost:8080/dados')
 			.then(response => {
 				return handler(response);
 			})
