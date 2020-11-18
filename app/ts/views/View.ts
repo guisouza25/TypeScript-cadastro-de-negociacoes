@@ -22,7 +22,7 @@ export abstract class View<T> {
 
 	@tempoDeExecucao()
 	update(model: T): void {
-
+		
 		let template = this.template(model);
 		
 		if(this._escapar) {

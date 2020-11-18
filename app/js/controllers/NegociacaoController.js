@@ -1,4 +1,4 @@
-System.register(["../views/index", "../models/index", "../helpers/decorators/index"], function (exports_1, context_1) {
+System.register(["../views/index", "../models/index", "../helpers/decorators/index", "../services/NegociacaoService", "../helpers/index"], function (exports_1, context_1) {
     "use strict";
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -6,8 +6,16 @@ System.register(["../views/index", "../models/index", "../helpers/decorators/ind
         else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
+    var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+        return new (P || (P = Promise))(function (resolve, reject) {
+            function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+            function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+            function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+            step((generator = generator.apply(thisArg, _arguments || [])).next());
+        });
+    };
     var __moduleName = context_1 && context_1.id;
-    var index_1, index_2, index_3, timer, NegociacaoController, DiaDaSemana, Test;
+    var index_1, index_2, index_3, NegociacaoService_1, index_4, NegociacaoController, DiaDaSemana, Test;
     return {
         setters: [
             function (index_1_1) {
@@ -18,53 +26,57 @@ System.register(["../views/index", "../models/index", "../helpers/decorators/ind
             },
             function (index_3_1) {
                 index_3 = index_3_1;
+            },
+            function (NegociacaoService_1_1) {
+                NegociacaoService_1 = NegociacaoService_1_1;
+            },
+            function (index_4_1) {
+                index_4 = index_4_1;
             }
         ],
         execute: function () {
-            timer = 0;
             NegociacaoController = class NegociacaoController {
                 constructor() {
                     this._negociacoes = new index_2.Negociacoes();
                     this._negociacoesView = new index_1.NegociacoesView('#negociacoesView', true);
-                    this._mensagemView = new index_1.MensagemView('#mensagemView', true);
+                    this._mensagemView = new index_1.MensagemView('#mensagemView');
+                    this._negociacaoService = new NegociacaoService_1.NegociacaoService();
                     this._negociacoesView.update(this._negociacoes);
                 }
                 adiciona() {
                     let data = new Date(this._inputData.val().replace(/-/g, ','));
                     if (data.getDay() == DiaDaSemana.Domingo || data.getDay() == DiaDaSemana.Sabado) {
-                        this._mensagemView.update('Negociações somente em dias úteis!');
+                        this._mensagemView.update('Negociações somente em dias úteis!', 'danger');
                         return;
                     }
                     const negociacao = new index_2.Negociacao(data, parseInt(this._inputQuantidade.val()), parseFloat(this._inputValor.val()));
                     this._negociacoes.adiciona(negociacao);
+                    index_4.imprime(negociacao, this._negociacoes);
                     this._negociacoes.getNegociacoes().length = 0;
                     this._negociacoesView.update(this._negociacoes);
-                    this._mensagemView.update('Negociação adicionada com sucesso!');
+                    this._mensagemView.update('Negociação adicionada com sucesso!', 'success');
                 }
                 importaDados() {
-                    function isOk(response) {
-                        if (response.ok) {
-                            return response;
+                    return __awaiter(this, void 0, void 0, function* () {
+                        try {
+                            const negociacoes = yield this._negociacaoService
+                                .listarNegociacoes(response => {
+                                if (response.ok) {
+                                    return response;
+                                }
+                                else {
+                                    throw new Error('response.statusText');
+                                }
+                            });
+                            const negociacoesJaImportadas = this._negociacoes.getNegociacoes();
+                            negociacoes
+                                .filter(negociacao => !negociacoesJaImportadas.some(jaImportada => negociacao.isEqual(jaImportada)));
+                            negociacoes.forEach(negociacao => { this._negociacoes.adiciona(negociacao); });
+                            this._negociacoesView.update(this._negociacoes);
                         }
-                        else {
-                            throw new Error(response.statusText);
+                        catch (error) {
+                            this._mensagemView.update(error.message, 'danger');
                         }
-                    }
-                    fetch('http://localhost:8080/dados')
-                        .then(response => {
-                        return isOk(response);
-                    })
-                        .then(response => {
-                        return response.json();
-                    })
-                        .then((dados) => {
-                        dados
-                            .map(dado => { return new index_2.Negociacao(new Date(), dado.vezes, dado.montante); })
-                            .forEach(negociacao => { return this._negociacoes.adiciona(negociacao); });
-                        this._negociacoesView.update(this._negociacoes);
-                    })
-                        .catch(error => {
-                        console.log(error.message);
                     });
                 }
             };

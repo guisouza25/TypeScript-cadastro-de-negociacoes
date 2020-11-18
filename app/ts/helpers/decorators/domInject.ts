@@ -30,7 +30,7 @@ export function domInject(seletor: string) {
 		}
 
 		/**
-		 * Aqui eu coloco a função acima e coloco na propriedade do meu objeto
+		 * Aqui eu coloco a função acima e coloco na propriedade do objeto
 		 * no qual o decorator está posicionado.
 		 * target - que vai receber a property que vai ser criada.
 		 * propertyKey - nome da propriedade a ser criada

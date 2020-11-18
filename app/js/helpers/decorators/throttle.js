@@ -5,13 +5,10 @@ System.register([], function (exports_1, context_1) {
         return function (target, propertyKey, descriptor) {
             const metodoOriginal = descriptor.value;
             let timer = 0;
-            descriptor.value = function (...args) {
-                if (event)
-                    event.preventDefault();
+            descriptor.value = function (event, ...args) {
+                event.preventDefault();
                 clearInterval(timer);
-                timer = setTimeout(() => {
-                    metodoOriginal.apply(this, args);
-                }, 500);
+                timer = setTimeout(() => { metodoOriginal.apply(this, args); }, 500);
             };
             return descriptor;
         };

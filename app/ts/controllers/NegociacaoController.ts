@@ -1,8 +1,9 @@
 import { NegociacoesView, MensagemView } from '../views/index';
 import { Negociacoes, Negociacao, NegociacaoParcial } from '../models/index';
 import { domInject, throttle } from '../helpers/decorators/index';
+import { HandlerFunction, NegociacaoService } from '../services/NegociacaoService';
+import { imprime } from '../helpers/index';
 
-let timer = 0;
 
 export class NegociacaoController {
 
@@ -14,11 +15,12 @@ export class NegociacaoController {
 	
 	@domInject('#valor')
 	private _inputValor: JQuery;
+
 	private _negociacoes = new Negociacoes();
 	private _negociacoesView = new NegociacoesView('#negociacoesView', true);
-	private _mensagemView = new MensagemView('#mensagemView', true);
+	private _mensagemView = new MensagemView('#mensagemView');
 
-
+	private _negociacaoService = new NegociacaoService();
 
 	constructor() {
 		this._negociacoesView.update(this._negociacoes);
@@ -31,7 +33,7 @@ export class NegociacaoController {
 
 		 //data.getDay() == 0 || data.getDay() == 6
 		if(data.getDay() == DiaDaSemana.Domingo || data.getDay() == DiaDaSemana.Sabado) {
-			this._mensagemView.update('Negociações somente em dias úteis!');
+			this._mensagemView.update('Negociações somente em dias úteis!', 'danger');
 			return;
 		}
 
@@ -42,6 +44,8 @@ export class NegociacaoController {
 		);
 		
 		this._negociacoes.adiciona(negociacao);
+		
+		imprime(negociacao, this._negociacoes);
 
 		this._negociacoes.getNegociacoes().length = 0
 
@@ -52,42 +56,41 @@ export class NegociacaoController {
 		// });
 
 		this._negociacoesView.update(this._negociacoes)
-		this._mensagemView.update('Negociação adicionada com sucesso!');
+		this._mensagemView.update('Negociação adicionada com sucesso!', 'success');
 	}
 	
 	@throttle(500)
-	importaDados() {
-	
-		function isOk(response: Response) {
-			if(response.ok) {
-				return response
-			} else {
-				throw new Error(response.statusText)
-			}
-		}
+	async importaDados() {
+		
+		try {
+			/**
+			 * await - espera a promisse ser processada e suspende a execução de
+			 * importaDados() e a aplicação continua rodando
+			 */
+			const negociacoes = await this._negociacaoService
+			.listarNegociacoes(response => {
+				if(response.ok) {
+					return response
+				} else {
+					throw new Error('response.statusText')
+				}
+			})
+		
+			const negociacoesJaImportadas = this._negociacoes.getNegociacoes();
 
-	
-		fetch('http://localhost:8080/dados')
-			// .then(function(response) {
-			// 	console.log(response.json())
-			// })
-			.then(response => {
-				return isOk(response)
-			})
-			.then(response => {
-				return response.json()
-			})
-			.then((dados: Array<NegociacaoParcial>) => {
-				dados
-					.map(dado => { return new Negociacao(new Date(), dado.vezes, dado.montante)})
-					.forEach(negociacao => { return this._negociacoes.adiciona(negociacao) })
-				this._negociacoesView.update(this._negociacoes)
-			})
-			.catch(error => {
-				console.log(error.message)
-			})
-	
-	}	
+			negociacoes
+				.filter(negociacao => 
+					!negociacoesJaImportadas.some(jaImportada => 
+						negociacao.isEqual(jaImportada)))
+
+			negociacoes.forEach(negociacao => { this._negociacoes.adiciona(negociacao) });
+			this._negociacoesView.update(this._negociacoes)
+
+		} catch (error) {
+
+			this._mensagemView.update(error.message, 'danger')
+		}	
+	}
 }
 
 enum DiaDaSemana {

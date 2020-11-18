@@ -1,17 +1,20 @@
-System.register(["./View"], function (exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var View_1, MensagemView;
+    var MensagemView;
     return {
-        setters: [
-            function (View_1_1) {
-                View_1 = View_1_1;
-            }
-        ],
+        setters: [],
         execute: function () {
-            MensagemView = class MensagemView extends View_1.View {
-                template(model) {
-                    return `<p class="alert alert-info">${model}</p>`;
+            MensagemView = class MensagemView {
+                constructor(seletor) {
+                    this._elemento = $(seletor);
+                }
+                update(mensagem, type) {
+                    let template = this.template(mensagem, type);
+                    this._elemento.html(template);
+                }
+                template(mensagem, type) {
+                    return `<p class="alert alert-${type}">${mensagem}</p>`;
                 }
             };
             exports_1("MensagemView", MensagemView);

@@ -1,10 +1,20 @@
 import { View } from './View';
 
-export class MensagemView extends View<string> {
+export class MensagemView {
 	
+	private _elemento: JQuery;
 
-	protected template(model: string): string {
-		return `<p class="alert alert-info">${model}</p>`
+	constructor(seletor: string) {
+		this._elemento = $(seletor);
+	}
+	
+	update(mensagem: string, type: string): void {
+		let template = this.template(mensagem, type);	
+		this._elemento.html(template);
+	}
+
+	protected template(mensagem: string, type: string): string {
+		return `<p class="alert alert-${type}">${mensagem}</p>`
 	}
 
 }
