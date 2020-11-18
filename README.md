@@ -1,11 +1,11 @@
 ## Projeto Typescrip cadastro de Negociações
 
-Projeto totalmente escrito em TypeScript, abordando as suas principais ferramentas:
+Projeto escrito em TypeScript, abordando as seguintes ferramentas ferramentas:
 
 * Modelagem com orientação a objetos, utilizando herança e interfaces e polimorfismo
 * Typescrypt definition para utilização da biblioteca jQuery
 * Uso da propriedade readonly, e ativando stricNullChecks e noImplicitAny
-* Uso dos decorators. i=Implementação do padrão throttle, lazy loading de elementos do DOM
+* Uso dos decorators. Implementação do padrão throttle, lazy loading de elementos do DOM
 * Utilização de uma interface para a API externa
 * Requisição assíncrona com async/await
 
