@@ -49,6 +49,11 @@ System.register(["../views/index", "../models/index", "../helpers/decorators/ind
                         this._mensagemView.update('Negociações somente em dias úteis!', 'danger');
                         return;
                     }
+                    let dataTime = new Date(Date.now());
+                    if (dataTime.getHours() <= 10 || dataTime.getHours() >= 16) {
+                        this._mensagemView.update('Não é possivel realizar a operação. Tente entre 10h e 16h.', 'danger');
+                        return;
+                    }
                     const negociacao = new index_2.Negociacao(data, parseInt(this._inputQuantidade.val()), parseFloat(this._inputValor.val()));
                     this._negociacoes.adiciona(negociacao);
                     index_4.imprime(negociacao, this._negociacoes);
@@ -65,7 +70,7 @@ System.register(["../views/index", "../models/index", "../helpers/decorators/ind
                                     return response;
                                 }
                                 else {
-                                    throw new Error('response.statusText');
+                                    throw new Error(response.statusText);
                                 }
                             });
                             const negociacoesJaImportadas = this._negociacoes.getNegociacoes();

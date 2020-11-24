@@ -29,11 +29,19 @@ export class NegociacaoController {
 	@throttle(500)
 	adiciona() { 
 
+		
 		let data = new Date(this._inputData.val().replace(/-/g, ','));
 
 		 //data.getDay() == 0 || data.getDay() == 6
 		if(data.getDay() == DiaDaSemana.Domingo || data.getDay() == DiaDaSemana.Sabado) {
 			this._mensagemView.update('Negociações somente em dias úteis!', 'danger');
+			return;
+		}
+
+		let dataTime = new Date(Date.now())
+
+		if(dataTime.getHours() <= 10 || dataTime.getHours() >= 16) {
+			this._mensagemView.update('Não é possivel realizar a operação. Tente entre 10h e 16h.', 'danger');
 			return;
 		}
 
@@ -72,7 +80,7 @@ export class NegociacaoController {
 				if(response.ok) {
 					return response
 				} else {
-					throw new Error('response.statusText')
+					throw new Error(response.statusText)
 				}
 			})
 		
