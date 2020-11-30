@@ -14,9 +14,11 @@ export class Negociacoes implements MeuObjeto<Negociacoes> {
 	getNegociacoes(): Array<Negociacao> {
 
 		//passando a lista de negociacoes para um novo array, preservando
-		//o array original(_negociacoes)
+		//o array original(_negociacoes) - imutabilidade
+		let novoArray = Object.assign([], this._negociacoes)
+		return novoArray;
 
-		return ([] as Array<Negociacao>).concat(this._negociacoes);
+		//return ([] as Array<Negociacao>).concat(this._negociacoes);
 	}
 
 	paraTexto(): void {

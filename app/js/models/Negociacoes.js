@@ -13,7 +13,8 @@ System.register([], function (exports_1, context_1) {
                     this._negociacoes.push(negociacao);
                 }
                 getNegociacoes() {
-                    return [].concat(this._negociacoes);
+                    let novoArray = Object.assign([], this._negociacoes);
+                    return novoArray;
                 }
                 paraTexto() {
                     console.log(JSON.stringify(this._negociacoes));
